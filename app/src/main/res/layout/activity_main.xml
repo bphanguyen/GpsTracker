@@ -48,6 +48,18 @@
             android:layout_marginTop="10dp"
             />
 
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:id="@+id/editTextPassword"
+            android:ems="10"
+            android:layout_below="@+id/editSmallMsg"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,15 +83,66 @@
             android:layout_marginLeft="10dp"
             />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Password"
+            android:id="@+id/textViewPass"
+            android:layout_alignTop="@+id/editTextPassword"
+            android:layout_toRightOf="@id/editTextPassword"
+            android:layout_marginLeft="10dp"
+            />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send"
             android:id="@+id/buttonTest"
-            android:layout_below="@+id/editSmallMsg"
-            android:layout_alignLeft="@+id/editSmallMsg"
-            android:layout_alignStart="@+id/editSmallMsg"
+            android:layout_below="@+id/editTextPassword"
+            android:layout_alignLeft="@+id/editTextPassword"
+            android:layout_alignStart="@+id/editTextPassword"
             android:layout_marginTop="30dp"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unlock"
+            android:id="@+id/buttonUnlock"
+            android:layout_below="@+id/buttonTest"
+            android:layout_alignLeft="@+id/buttonTest"
+            android:layout_alignStart="@+id/buttonTest"
+            android:layout_marginTop="20dp"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start"
+            android:id="@+id/buttonStart"
+            android:layout_below="@+id/buttonUnlock"
+            android:layout_alignLeft="@+id/buttonUnlock"
+            android:layout_alignStart="@+id/buttonUnlock"
+            android:layout_marginTop="20dp"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop"
+            android:id="@+id/buttonStop"
+            android:layout_alignBaseline="@+id/buttonStart"
+            android:layout_toRightOf="@+id/buttonStart"
+            android:layout_marginLeft="25dp" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Record Log"
+            android:id="@+id/checkboxRecord"
+            android:layout_below="@+id/buttonStart"
+            android:layout_marginTop="20dp"
             />
 
     </RelativeLayout>
