@@ -64,7 +64,62 @@ public class MainActivity extends RuntimePermissionsActivity {
         this.registerReceiver(myReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
 
         myLog.i(TAG, "New Message");
+
+
+
+        controlButtons();
+
     }
+
+
+    private void controlButtons(){
+
+        EditText editTextPass = (EditText) findViewById(R.id.editTextPassword);
+
+        //Unlock
+        Button buttonUnlock = (Button) findViewById(R.id.buttonUnlock);
+        buttonUnlock.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v){
+
+            }
+
+        });
+
+
+        //Start
+        Button buttonStart = (Button) findViewById(R.id.buttonStart);
+        buttonStart.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v){
+
+            }
+
+        });
+
+
+        //Stop
+        Button buttonStop = (Button) findViewById(R.id.buttonStop);
+        buttonStop.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v){
+
+            }
+
+        });
+
+    }
+
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+
 
     @Override
     public void onPermissionsGranted(int requestCode) {
