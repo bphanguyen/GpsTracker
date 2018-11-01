@@ -1,6 +1,7 @@
 package com.application.bach.gpstracker;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -13,7 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends RuntimePermissionsActivity {
 
@@ -29,6 +33,13 @@ public class MainActivity extends RuntimePermissionsActivity {
 
     private Context myAppContext = null;
 
+    EditText editTextPhone;
+    EditText editTextPass;
+    CheckBox checkBoxRecord;
+
+    //Context myContext;
+    Controller myController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +48,30 @@ public class MainActivity extends RuntimePermissionsActivity {
 
         //askUserPermission(this, Manifest.permission.SEND_SMS);
 
-        //myAppContext = this.getApplicationContext();
+        myAppContext = this.getApplicationContext();
+
+        myController = new Controller(myAppContext, MainActivity.this);
 
         //Phone number
         //final EditText editTextPhone = (EditText) findViewById(R.id.editTextPhone);
         //myText = editTextPhone.getText().toString();
+
+
+        //Récepteur de Sms
+        SmsReceiver myReceiver = new SmsReceiver();
+
+        this.registerReceiver(myReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+
+        myLog.i(TAG, "New Message");
+
+        controlButtons();
+
+
+
+    }
+
+
+    private void controlButtons(){
 
         //Send button
         Button buttonTest = (Button) findViewById(R.id.buttonTest);
@@ -58,23 +88,10 @@ public class MainActivity extends RuntimePermissionsActivity {
         });
 
 
-        //Récepteur de Sms
-        SmsReceiver myReceiver = new SmsReceiver();
+        editTextPhone = (EditText)  findViewById(R.id.editTextPhone);
+        editTextPass = (EditText) findViewById(R.id.editTextPassword);
+        checkBoxRecord = (CheckBox) findViewById(R.id.checkboxRecord);
 
-        this.registerReceiver(myReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
-
-        myLog.i(TAG, "New Message");
-
-
-
-        controlButtons();
-
-    }
-
-
-    private void controlButtons(){
-
-        EditText editTextPass = (EditText) findViewById(R.id.editTextPassword);
 
         //Unlock
         Button buttonUnlock = (Button) findViewById(R.id.buttonUnlock);
@@ -82,6 +99,13 @@ public class MainActivity extends RuntimePermissionsActivity {
 
             @Override
             public void onClick(View v){
+
+                if ( (myController.unlock(editTextPass.getText().toString())) ){
+                    editTextPhone.setText(myController.getTel());
+                    checkBoxRecord.setChecked(myController.getRecord());
+                }else{
+                    Toast.makeText(myAppContext, "Unlock failed", Toast.LENGTH_LONG).show();
+                }
 
             }
 
@@ -95,6 +119,20 @@ public class MainActivity extends RuntimePermissionsActivity {
             @Override
             public void onClick(View v){
 
+                if (myController.isStartOk(editTextPhone.getText().toString(), editTextPass.getText().toString())){
+
+                    if (checkBoxRecord.isChecked()){
+                        ManageSettings.isRecord = true;
+                    }else{
+                        ManageSettings.isRecord = false;
+                    }
+
+                    Toast.makeText(myAppContext, "Start service", Toast.LENGTH_LONG).show();
+
+                }else {
+                    Toast.makeText(myAppContext, "Can't start service", Toast.LENGTH_LONG).show();
+                }
+
             }
 
         });
@@ -107,8 +145,35 @@ public class MainActivity extends RuntimePermissionsActivity {
             @Override
             public void onClick(View v){
 
+                if (myController.stopIsOk(editTextPass.getText().toString())){
+
+                    if (myController.broadCastMessage("stopService")){
+                        Toast.makeText(myAppContext, "Stop service", Toast.LENGTH_LONG).show();
+                    }
+
+                }else {
+                    Toast.makeText(myAppContext, "Can't stop service", Toast.LENGTH_LONG).show();
+                }
+
             }
 
+        });
+
+
+        //Checkbox
+        checkBoxRecord.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+
+                if (myController.unlock(editTextPass.getText().toString())){
+                    if (checkBoxRecord.isChecked()){
+                        ManageSettings.isRecord = true;
+                    }else{
+                        ManageSettings.isRecord = false;
+                    }
+                }
+
+            }
         });
 
     }
@@ -116,7 +181,25 @@ public class MainActivity extends RuntimePermissionsActivity {
 
     @Override
     public void onPause(){
+
+        myController.onPauseOk(editTextPhone.getText().toString(), editTextPass.getText().toString());
+
         super.onPause();
+    }
+
+
+
+    public boolean isMyServiceRunning(Class<?> serviceClass){
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+
+        for(ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)){
+            if (serviceClass.getName().equals(serviceInfo.service.getClassName())){
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
 
