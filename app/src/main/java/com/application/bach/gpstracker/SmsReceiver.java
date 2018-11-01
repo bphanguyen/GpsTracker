@@ -20,6 +20,10 @@ public class SmsReceiver extends BroadcastReceiver {
 
     private static final String TAG = "GpsTrackerActivity";
 
+    private static final String LOCK_ACTION = "lockMyPhone";
+
+    private static final String STOP_ACTION = "stopService";
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -61,9 +65,29 @@ public class SmsReceiver extends BroadcastReceiver {
     /*--package--*/void checkSms(String SMS, Context context){
 
         //Stoppe la réception des Sms : ! Attention le système n'est plus pilotable
-
+        /*
         if (SMS.equals("STOP")){
             LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
         }
+        */
+
+        if (STOP_ACTION.equals(SMS)){
+
+            broadCastMessage(context, STOP_ACTION);
+
+        }
+    }
+
+
+    private void broadCastMessage(Context context, String msg){
+
+        Log.d(TAG, "Broadcasting message");
+
+        Intent intent = new Intent(LOCK_ACTION);
+
+        intent.putExtra("message", msg);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
     }
 }

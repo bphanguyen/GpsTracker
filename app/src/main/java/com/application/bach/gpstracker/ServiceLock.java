@@ -1,8 +1,13 @@
 package com.application.bach.gpstracker;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,6 +17,14 @@ public class ServiceLock extends Service {
 
     private static final String TAG = "GpsTrackerActivity";
 
+    private static final String LOCK_ACTION = "lockMyPhone";
+
+    private static final String STOP_ACTION = "stopService";
+
+    //SMS
+    SmsReceiver myReceiver;
+    BroadcastReceiver msgCom;
+
 
     public ServiceLock() {
     }
@@ -19,6 +32,11 @@ public class ServiceLock extends Service {
 
     @Override
     public void onCreate() {
+
+        initSms();
+
+        initBroadcast();
+
         //Replace LENGTH_LONG by LENGTH_SHORT after test
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
 
@@ -29,6 +47,12 @@ public class ServiceLock extends Service {
 
     @Override
     public void onDestroy() {
+
+        LocalBroadcastManager.getInstance(this.getApplicationContext())
+                .unregisterReceiver(myReceiver);
+
+        unregisterReceiver(myReceiver);
+
         super.onDestroy();
     }
 
@@ -44,4 +68,48 @@ public class ServiceLock extends Service {
         // TODO: Return the communication channel to the service.
         return null;
     }
+
+
+    private void initBroadcast(){
+
+        msgCom = new MsgCom();
+
+        //Récepteur local pour les intents
+        LocalBroadcastManager.getInstance(this).registerReceiver(msgCom,
+                new IntentFilter(LOCK_ACTION));
+    }
+
+
+    private void initSms(){
+        //Réception des SMS
+        myReceiver = new SmsReceiver();
+
+        this.registerReceiver(myReceiver,
+                new IntentFilter("android.provide.Telephony.SMS_RECEIVED"));
+    }
+
+
+    private class MsgCom extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent){
+
+            if (TextUtils.equals(intent.getAction(), LOCK_ACTION)){
+
+                String message = intent.getStringExtra("message");
+
+                Log.d("MsgCom receiver", "Got message : "+message);
+
+                if (STOP_ACTION.equals(message)){
+
+                    ServiceLock.this.stopSelf();
+
+                    Log.d("MsgCom receiver", "Service stopped.");
+                }
+
+            }
+
+        }
+    }
+
 }
