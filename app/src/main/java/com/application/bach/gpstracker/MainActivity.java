@@ -79,10 +79,10 @@ public class MainActivity extends RuntimePermissionsActivity {
             @Override
             public void onClick(View v){
 
-                askUserPermission(activity, Manifest.permission.SEND_SMS);
+            askUserPermission(activity, Manifest.permission.SEND_SMS);
 
-                //ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SEND_SMS},
-                //        REQUEST_PERMISSIONS);
+            //ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.SEND_SMS},
+            //        REQUEST_PERMISSIONS);
 
             }
         });
@@ -100,12 +100,12 @@ public class MainActivity extends RuntimePermissionsActivity {
             @Override
             public void onClick(View v){
 
-                if ( (myController.unlock(editTextPass.getText().toString())) ){
-                    editTextPhone.setText(myController.getTel());
-                    checkBoxRecord.setChecked(myController.getRecord());
-                }else{
-                    Toast.makeText(myAppContext, "Unlock failed", Toast.LENGTH_LONG).show();
-                }
+            if ( (myController.unlock(editTextPass.getText().toString())) ){
+                editTextPhone.setText(myController.getTel());
+                checkBoxRecord.setChecked(myController.getRecord());
+            }else{
+                Toast.makeText(myAppContext, "Unlock failed", Toast.LENGTH_LONG).show();
+            }
 
             }
 
@@ -119,19 +119,19 @@ public class MainActivity extends RuntimePermissionsActivity {
             @Override
             public void onClick(View v){
 
-                if (myController.isStartOk(editTextPhone.getText().toString(), editTextPass.getText().toString())){
+            if (myController.isStartOk(editTextPhone.getText().toString(), editTextPass.getText().toString())){
 
-                    if (checkBoxRecord.isChecked()){
-                        ManageSettings.isRecord = true;
-                    }else{
-                        ManageSettings.isRecord = false;
-                    }
-
-                    Toast.makeText(myAppContext, "Start service", Toast.LENGTH_LONG).show();
-
-                }else {
-                    Toast.makeText(myAppContext, "Can't start service", Toast.LENGTH_LONG).show();
+                if (checkBoxRecord.isChecked()){
+                    ManageSettings.isRecord = true;
+                }else{
+                    ManageSettings.isRecord = false;
                 }
+
+                Toast.makeText(myAppContext, "Start service", Toast.LENGTH_LONG).show();
+
+            }else {
+                Toast.makeText(myAppContext, "Can't start service", Toast.LENGTH_LONG).show();
+            }
 
             }
 
@@ -145,15 +145,15 @@ public class MainActivity extends RuntimePermissionsActivity {
             @Override
             public void onClick(View v){
 
-                if (myController.stopIsOk(editTextPass.getText().toString())){
+            if (myController.stopIsOk(editTextPass.getText().toString())){
 
-                    if (myController.broadCastMessage("stopService")){
-                        Toast.makeText(myAppContext, "Stop service", Toast.LENGTH_LONG).show();
-                    }
-
-                }else {
-                    Toast.makeText(myAppContext, "Can't stop service", Toast.LENGTH_LONG).show();
+                if (myController.broadCastMessage("stopService")){
+                    Toast.makeText(myAppContext, "Stop service", Toast.LENGTH_LONG).show();
                 }
+
+            }else {
+                Toast.makeText(myAppContext, "Can't stop service", Toast.LENGTH_LONG).show();
+            }
 
             }
 
@@ -165,13 +165,13 @@ public class MainActivity extends RuntimePermissionsActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
 
-                if (myController.unlock(editTextPass.getText().toString())){
-                    if (checkBoxRecord.isChecked()){
-                        ManageSettings.isRecord = true;
-                    }else{
-                        ManageSettings.isRecord = false;
-                    }
+            if (myController.unlock(editTextPass.getText().toString())){
+                if (checkBoxRecord.isChecked()){
+                    ManageSettings.isRecord = true;
+                }else{
+                    ManageSettings.isRecord = false;
                 }
+            }
 
             }
         });
