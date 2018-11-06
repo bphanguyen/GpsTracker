@@ -100,12 +100,14 @@ public class MainActivity extends RuntimePermissionsActivity {
             @Override
             public void onClick(View v){
 
-            if ( (myController.unlock(editTextPass.getText().toString())) ){
-                editTextPhone.setText(myController.getTel());
-                checkBoxRecord.setChecked(myController.getRecord());
-            }else{
-                Toast.makeText(myAppContext, "Unlock failed", Toast.LENGTH_LONG).show();
-            }
+                if ( (myController.unlock(editTextPass.getText().toString())) ){
+                    Toast.makeText(myAppContext, "Unlock success", Toast.LENGTH_LONG).show();
+
+                    editTextPhone.setText(myController.getTel());
+                    checkBoxRecord.setChecked(myController.getRecord());
+                }else{
+                    Toast.makeText(myAppContext, "Unlock failed", Toast.LENGTH_LONG).show();
+                }
 
             }
 

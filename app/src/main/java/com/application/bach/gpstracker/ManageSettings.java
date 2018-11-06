@@ -16,7 +16,7 @@ public class ManageSettings {
     public static Boolean isRecord;
 
     //nom fichier shareprefs
-    public static final String PREFS_PRIVATE = "data";
+    public static final String PREFS_PRIVATE = "mySharedPreferences.xml";
 
     private SharedPreferences prefsPrivate;
 
@@ -37,7 +37,7 @@ public class ManageSettings {
 
     public void restoreData(Context context, HashMap<String,String> data){
 
-        SharedPreferences myPrefs = context.getSharedPreferences("data", Context.MODE_PRIVATE);
+        SharedPreferences myPrefs = context.getSharedPreferences(PREFS_PRIVATE, Context.MODE_PRIVATE);
 
         data.put("TEL", myPrefs.getString("TEL", null));
         data.put("PASS", myPrefs.getString("PASS", null));

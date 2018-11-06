@@ -38,7 +38,7 @@ public class ServiceLock extends Service {
         initBroadcast();
 
         //Replace LENGTH_LONG by LENGTH_SHORT after test
-        Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ServiceLock.onCreate() Service started", Toast.LENGTH_SHORT).show();
 
         myLog.i(TAG, "Intent received : ServiceLock started");
 
@@ -47,6 +47,8 @@ public class ServiceLock extends Service {
 
     @Override
     public void onDestroy() {
+
+        Toast.makeText(this, "ServiceLock.onDestroy() Service destroyed", Toast.LENGTH_SHORT).show();
 
         LocalBroadcastManager.getInstance(this.getApplicationContext())
                 .unregisterReceiver(myReceiver);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -46,12 +47,27 @@ public class Controller {
         HashMap<String, String> data = new HashMap<String, String>();
         loadMyData.restoreData(myContext, data);
 
+        Log.d("Controller", "unlock modeInit = "+modeInit);
+        Log.d("Controller", "unlock unlock = "+unlock);
+        Log.d("Controller", "unlock pass = "+pass);
+        Log.d("Controller", "unlock pass encoded = "+loadMyData.encode(pass));
+        Log.d("Controller", "unlock data.get(PASS) = "+data.get("PASS"));
+        Log.d("Controller", "unlock tel = "+tel);
+        Log.d("Controller", "unlock ManageSettings.isRecord = "+ManageSettings.isRecord);
+
         if (pass == null || pass.trim().isEmpty()) return false;
 
-        if ("PASS".equals(loadMyData.encode(pass))){
+        if (modeInit){
             unlock = true;
             return true;
         }
+
+        if (loadMyData.encode(pass).trim().equals(data.get("PASS").trim())){
+            unlock = true;
+            return true;
+        }
+
+        Toast.makeText(myContext, "Unlock pass not valid", Toast.LENGTH_LONG).show();
 
         unlock = false;
         return false;
@@ -82,6 +98,12 @@ public class Controller {
         tel = data.get("TEL");
 
         ManageSettings.isRecord = Boolean.parseBoolean(data.get("RECORD"));
+
+        Log.d("Controller", "loadSettings modeInit = "+modeInit);
+        Log.d("Controller", "loadSettings unlock = "+unlock);
+        Log.d("Controller", "loadSettings pass = "+pass);
+        Log.d("Controller", "loadSettings tel = "+tel);
+        Log.d("Controller", "loadSettings ManageSettings.isRecord = "+ManageSettings.isRecord);
     }
 
 
